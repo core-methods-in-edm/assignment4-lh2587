@@ -1,0 +1,79 @@
+---
+title: "Assignment 4"
+author: "Lu Han"
+date: "2017年11月18日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+######PART 1
+D1 <- read.csv("C:/Users/owner/Desktop/assignment4-lh2587-master/Assistments-confidence.csv")
+D1 = D1[,-1]
+
+install.packages('corrplot')
+library(corrplot)
+
+COR <- cor(D1)
+corrplot(COR, order="AOE", method="circle", tl.pos="lt", type="upper",        
+         tl.col="black", tl.cex=0.6, tl.srt=45, 
+         addCoef.col="black", addCoefasPercent = TRUE,
+         sig.level=0.50, insig = "blank")
+
+D2 <- D1[,-4]
+D2 <- scale(D2, center = TRUE)
+
+pca <- prcomp(D2, scale = TRUE)
+pca$sdev
+pca$sdev^2
+summary(pca)
+plot(pca, type = "lines")
+
+
+######PART 2
+D3 <- as.data.frame(pca$x)
+D3 = D3[,1:4]
+D4 <- cbind(D3, as.data.frame(D1$mean_correct))
+
+COR2 <- cor(D4)
+corrplot(COR2, order="AOE", method="circle", tl.pos="lt", type="upper",        
+         tl.col="black", tl.cex=0.6, tl.srt=45, 
+         addCoef.col="black", addCoefasPercent = TRUE,
+         sig.level=0.50, insig = "blank")
+
+pca$rotation
+loadings <- abs(pca$rotation)
+sweep(loadings, 2, colSums(loadings), "/") 
+biplot(pca)
+
+COR3 <- cor(D3)
+corrplot(COR3, order="AOE", method="circle", tl.pos="lt", type="upper",        
+         tl.col="black", tl.cex=0.6, tl.srt=45, 
+         addCoef.col="black", addCoefasPercent = TRUE,
+         sig.level=0.50, insig = "blank")
+
+
+######PART 3
+D1 <- read.csv("C:/Users/owner/Desktop/assignment4-lh2587-master/humor_data.csv")
+COR <- cor(D1)
+corrplot(COR, order="AOE", method="circle", tl.pos="lt", type="upper",        
+         tl.col="black", tl.cex=0.6, tl.srt=45, 
+         addCoef.col="black", addCoefasPercent = TRUE,
+         sig.level=0.50, insig = "blank")
+
+D2 <- princomp(D1)
+D2 <- scale(D1, center = TRUE)
+pca <- prcomp(D2, scale = TRUE)
+
+pca$sdev
+pca$sdev^2
+summary(pca)
+plot(pca, type = "lines")
+
+D3 <- as.data.frame(pca$x)
+D3 = D3[,1:5]
+
+pca$rotation
+loadings <- abs(pca$rotation)
+sweep(loadings, 2, colSums(loadings), "/") 
+biplot(pca)
+```
